@@ -7,20 +7,37 @@
 
 int main()
 {
-    sf::RenderWindow window(sf::VideoMode({ 800, 600 }), "SFML works!");
-    sf::CircleShape shape(100.f);
-    shape.setFillColor(sf::Color::Blue);
+	sf::RenderWindow window(sf::VideoMode(800, 600), "My first SFML Game", sf::Style::Titlebar | sf::Style::Close);
+	sf::Event ev;
 
-    while (window.isOpen())
-    {
-        while (const std::optional event = window.pollEvent())
-        {
-            if (event->is<sf::Event::Closed>())
-                window.close();
-        }
+	while (window.isOpen())
+	{
+		//Event polling
+		while (window.pollEvent(ev))
+		{
+			switch (ev.type)
+			{
+			case sf::Event::Closed:
+				window.close();
+				break;
+			case sf::Event::KeyPressed:
+				if (ev.key.code == sf::Keyboard::Escape)
+				{
+					window.close();
+				}
+				break;
+			}
+		}
 
-        window.clear();
-        window.draw(shape);
-        window.display();
-    }
+		//Update
+
+		//Render
+		window.clear();// Clear old frame
+
+		//Draw new frame
+
+		window.display();//Display new frame
+	}
+
+    return 0;
 }
