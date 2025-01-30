@@ -7,6 +7,9 @@ int main()
 
 	while (game.isRunning())
 	{
+		//Initialize srand
+		std::srand(static_cast<unsigned>(time(NULL)));
+
 		//Update
 		game.update();
 
