@@ -6,7 +6,9 @@ void Game::initializeVariables()
 	this->window = nullptr;
 
 	//Game logic
+	this->endGame = false;
 	this->points = 0;
+	this->health = 10;
 	this->enemySpawnTimerMax = 10.0f;
 	this->enemySpawnTimer = this->enemySpawnTimerMax;
 	this->maxEnemies = 10;
@@ -137,6 +139,8 @@ void Game::updateEnemies()
 		{
 			//Delete enemy
 			this->enemies.erase(this->enemies.begin() + i);
+			this->health -= 1;
+			std::cout << "Health: " << this->health << std::endl;
 		}
 	}
 
@@ -172,9 +176,17 @@ void Game::update()
 {
 	this->pollEvents();
 
-	this->updateMousePositions();
+	if (this->endGame == false)
+	{
+		this->updateMousePositions();
 
-	this->updateEnemies();
+		this->updateEnemies();
+	}
+	else 
+	{
+		//Game Over
+	}
+
 }
 
 void Game::renderEnemies()
