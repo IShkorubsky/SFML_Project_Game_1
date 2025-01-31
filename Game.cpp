@@ -54,6 +54,11 @@ const bool Game::isRunning() const
 	return this->window->isOpen();
 }
 
+const bool Game::getEndGame() const
+{
+	return this->endGame;
+}
+
 //Functions
 void Game::spawnEnemy()
 {
@@ -182,11 +187,12 @@ void Game::update()
 
 		this->updateEnemies();
 	}
-	else 
-	{
-		//Game Over
-	}
 
+	//Endgame condition
+	if (this->health <= 0)
+	{
+		this->endGame = true;
+	}
 }
 
 void Game::renderEnemies()

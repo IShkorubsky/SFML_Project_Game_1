@@ -56,6 +56,7 @@ public:
 
 	//Accessors
 	const bool isRunning() const;
+	const bool getEndGame() const;
 
 	//Functions
 	void spawnEnemy();	

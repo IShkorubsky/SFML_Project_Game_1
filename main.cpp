@@ -8,7 +8,7 @@ int main()
 	//Initialize game engine
 	Game game;
 
-	while (game.isRunning())
+	while (game.isRunning() && !game.getEndGame())
 	{
 		//Update
 		game.update();
