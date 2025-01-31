@@ -25,6 +25,25 @@ void Game::initializeWindow()
 	this->window->setFramerateLimit(60);
 }
 
+void Game::initializeFonts()
+{
+	if (this->font.loadFromFile("Fonts/Hello Cupcake.otf"))
+	{
+		std::cout << "ERROR::GAME::INITIALIZEFONTS::Failed to load font!" << std::endl;
+	}
+}
+
+void Game::initializeText()
+{
+	this->uiText.setFont(this->font);
+	this->uiText.setPosition(sf::Vector2f(10.f, -10.f));
+	this->uiText.setCharacterSize(70);
+	this->uiText.setScale(0.6f,0.6f);
+	this->uiText.setFillColor(sf::Color::White);
+	this->uiText.setOutlineColor(sf::Color::Black);
+	this->uiText.setOutlineThickness(3);
+}
+
 void Game::initializeEnemies()
 {
 	this->enemy.setPosition(10.0f,10.0f);
@@ -40,6 +59,8 @@ Game::Game()
 {
 	this->initializeVariables();
 	this->initializeWindow();
+	this->initializeFonts();
+	this->initializeText();
 	this->initializeEnemies();
 }
 
@@ -107,6 +128,16 @@ void Game::updateMousePositions()
 	this->mousePosView = this->window->mapPixelToCoords(this->mousePosWindow);
 }
 
+void Game::updateText()
+{
+	std::stringstream ss;
+	
+	ss << "Points : " << this->points << "\n" 
+		<< "Health : " << this->health << "\n";
+
+	this->uiText.setString(ss.str());
+}
+
 void Game::updateEnemies()
 {
 	/*
@@ -137,7 +168,7 @@ void Game::updateEnemies()
 	{
 		bool deleted = false;
 
-		this->enemies[i].move(0.0f, 5.0f);
+		this->enemies[i].move(0.0f, 2.0f);
 
 		//Check if enemy gets out of screen bounds
 		if (this->enemies[i].getPosition().y > this->window->getSize().y)
@@ -166,7 +197,6 @@ void Game::updateEnemies()
 
 					//Add Points
 					this->points += 5.0f;
-					std::cout << "Current points:" << this->points << std::endl;
 				}
 			}
 		}
@@ -185,6 +215,8 @@ void Game::update()
 	{
 		this->updateMousePositions();
 
+		this->updateText();
+
 		this->updateEnemies();
 	}
 
@@ -195,12 +227,17 @@ void Game::update()
 	}
 }
 
-void Game::renderEnemies()
+void Game::renderText(sf::RenderTarget& target)
+{
+	target.draw(this->uiText);
+}
+
+void Game::renderEnemies(sf::RenderTarget& target)
 {
 	//Renders the enemies.
 	for (auto& e : this->enemies)
 	{
-		this->window->draw(e);
+		target.draw(e);
 	}
 }
 
@@ -214,10 +251,12 @@ void Game::render()
 	*/
 
 	//Clear frame
-	this->window->clear();
+	this->window->clear(sf::Color::Cyan);
 
 	//Draw game objects
-	this->renderEnemies();
+	this->renderEnemies(*this->window);
+
+	this->renderText(*this->window);
 
 	//Draw game objects
 	this->window->display();
